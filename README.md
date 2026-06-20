@@ -1,130 +1,214 @@
-# 🚗 Auto Damage Segmentation
+# 🛣️ Road Crack Detection using YOLOv11 Segmentation
 
-Mashina qismlarini avtomatik aniqlash va segmentatsiya qilish tizimi.
-Sug'urta va ta'mirlash markazlari uchun shikastlangan qismlarni tezkor aniqlash.
+Yo'l yuzasidagi yoriqlarni (road cracks) avtomatik aniqlash va segmentatsiya qilish tizimi.
+
+Ushbu loyiha yo'llarni monitoring qilish, texnik xizmat ko'rsatishni rejalashtirish va infratuzilma holatini baholash uchun mo'ljallangan.
+
+---
 
 ## 🔗 Links
 
-| | Link |
-|---|---|
-| 🤗 Live Demo | [Hugging Face Space](https://huggingface.co/spaces/Sarvarbek13/auto-damage-segmentation) |
-| 📦 Dataset | [Roboflow Car Parts](https://universe.roboflow.com/person-detector/car-parts-segmentation) |
-| 💻 GitHub | [CV Final Exam Repo](https://github.com/Sarvarbek-Erniyazov/CV_final-exam_auto-damage-segmentation) |
+|              | Link                                                            |
+| ------------ | --------------------------------------------------------------- |
+| 🤗 Live Demo | Hugging Face Space (Coming Soon)                                |
+| 📦 Dataset   | Roboflow Road Crack Segmentation Dataset                        |
+| 💻 GitHub    | https://github.com/rasulbekdeveloper907/CV_Segmentation_Project |
+
+---
 
 ## 🧠 Pipeline
 
-Roboflow Dataset → YOLOv8-seg Fine-tuning → ONNX Export → YOLO + SAM → FastAPI + Gradio
+Roboflow Dataset → YOLOv11-seg Training → Model Evaluation → Gradio Deployment
 
-## 📦 Texnologiyalar
+---
 
-- YOLOv8-seg — instance segmentation (fine-tuned)
-- SAM — Segment Anything Model (Meta AI)
-- FastAPI — lokal REST API
-- Gradio — web demo (Hugging Face)
-- ONNX — production deployment format
-- Roboflow — dataset management
+## 📦 Technologies
 
-## 📁 Struktura
+* YOLOv11-seg — Road Crack Instance Segmentation
+* Roboflow — Dataset Management & Annotation
+* Gradio — Interactive Web Application
+* OpenCV — Image Processing
+* NumPy — Numerical Operations
+* Python 3.11
+* PyTorch
+* Ultralytics
 
-    auto-damage-segmentation/
-    ├── api/
-    │   ├── main.py
-    │   └── requirements.txt
-    ├── model/
-    │   ├── best.pt
-    │   └── best.onnx
-    ├── notebook/
-    │   └── train.ipynb
-    ├── report/
-    │   └── hisobot.md
-    └── README.md
+---
 
-## 📊 Metrikalar
+## 📁 Project Structure
 
-| Metrika | Qiymat |
-|---------|--------|
-| mAP50 | ~0.73 |
-| Mask mAP50 | ~0.73 |
-| Precision | ~0.66 |
-| Recall | ~0.79 |
-| Classes | 19 |
-| Dataset | 1503 rasm |
+```text
+CV_Segmentation/
+│
+├── api/
+│   └── main.py
+│
+├── notebook/
+│   └── train.ipynb
+│
+├── datasets/
+│
+├── models/
+│   └── best.pt
+│
+├── report/
+│   └── report.md
+│
+├── requirements.txt
+│
+└── README.md
+```
 
-## 🧪 Demo Natijalari (YOLO + SAM)
+---
 
-| Rasm | Detections | SAM Masks |
-|------|-----------|-----------|
-| Ezilgan mashina | 8 | 8 |
-| Orqa zarar | 3 | 3 |
-| Kuchli zarar | 8 | 8 |
+## 🎯 Problem Statement
 
-# Auto Damage Segmentation — Hisobot
+Yo'l yoriqlarini qo'lda aniqlash ko'p vaqt talab qiladi va inson xatoliklariga olib kelishi mumkin.
 
-## Muammo
-Avtomobil qismlarini avtomatik aniqlash va segmentatsiya qilish.
-Sug'urta kompaniyalari va ta'mirlash markazlari uchun shikastlangan qismlarni
-tezkor aniqlash tizimi.
+Maqsad:
 
-## Yechim
-YOLOv8-seg + SAM (Segment Anything Model) pipeline asosida
-instance segmentation tizimi yaratildi va FastAPI orqali deploy qilindi.
+* Yo'l yoriqlarini avtomatik aniqlash
+* Pixel-level segmentatsiya yaratish
+* Yoriq maydonini hisoblash
+* Yo'l holatini baholash
 
-### Pipeline
-YOLO (bounding box) → SAM (aniq pixel-level mask) → FastAPI (JSON response)
+---
 
-## Dataset
-- Manba: Roboflow Universe (Car Parts Segmentation)
-- Asl rasmlar: 603
-- Augmentatsiyadan keyin: 1503 (3x)
-- Classlar soni: 19
-- Train/Val/Test: 1350 / 75 / 78
-- Preprocessing: Auto-Orient, Resize 640x640
-- Augmentation: Flip, Rotation ±15°, Brightness ±25%, Blur 2px, Noise 2%
+## 📊 Dataset
 
-## Model
-- Arxitektura: YOLOv8n-seg (pretrained COCO → fine-tuned Car Parts)
-- Epochs: 50
-- Image size: 640x640
-- Export: ONNX (12.7 MB)
-- SAM: sam_b.pt (Meta AI)
+* Source: Roboflow Universe
+* Task: Road Crack Segmentation
+* Annotation Type: Segmentation Masks
+* Image Size: 640×640
 
-## Metrikalar (Validation)
-- mAP50: ~0.73
-- Mask mAP50: ~0.73
-- Precision: ~0.66
-- Recall: ~0.79
+### Preprocessing
 
-## Demo Natijalari
+* Auto Orient
+* Resize 640×640
 
-### SAMsiz (YOLO only — best.pt)
-| Rasm | Aniqlangan | Top detection |
-|------|-----------|---------------|
-| Rasm 1 (ezilgan mashina) | 7 ta | front_glass 94.3% |
-| Rasm 2 (daraxt ostida) | 4 ta | tailgate 50.2% |
-| Rasm 3 (kuchli zarar) | 9 ta | back_right_door 97.7% |
+### Augmentation
 
-### SAM bilan (YOLO + SAM pipeline — best.onnx)
-| Rasm | YOLO detections | SAM masks | Top detection |
-|------|----------------|-----------|---------------|
-| Rasm 1 (ezilgan mashina) | 8 ta | **8 ta mask** | right_mirror 86.3% |
-| Rasm 2 (orqa zarar) | 3 ta | **3 ta mask** | back_glass 60.4%, tailgate 58.9% |
-| Rasm 3 (kuchli zarar) | 8 ta | **8 ta mask** | back_right_door 97.7%, wheel 91.9% |
+* Horizontal Flip
+* Vertical Flip
+* Rotation ±15°
+* Brightness ±20%
+* Gaussian Blur
+* Random Noise
 
-### SAM qo'shilishi bilan nima yaxshilandi
-- YOLO faqat bounding box beradi
-- SAM har bir qism uchun pixel-level aniq mask chiqaradi
-- Deployment: best.pt → best.onnx (production ready, 20% kichikroq)
+---
 
-## Deployment
-- **Roboflow**: dataset versiyalash va boshqaruv
-- **FastAPI lokal**: /predict endpoint — rasm → JSON
-- **ONNX**: cross-platform, CPU/GPU da ishlaydi
-- **SAM**: Meta AI segment anything model
+## 🤖 Model
 
-## Texnologiyalar
-- YOLOv8-seg (Ultralytics)
-- SAM — Segment Anything Model (Meta AI)
-- FastAPI + Uvicorn
-- ONNX Runtime
-- Roboflow
-- Python 3.11
+### Architecture
+
+* YOLOv11n-seg
+
+### Training Configuration
+
+* Epochs: 50
+* Batch Size: 16
+* Image Size: 640
+* Optimizer: SGD
+* Pretrained: COCO
+
+---
+
+## 📈 Evaluation Metrics
+
+| Metric    | Value |
+| --------- | ----- |
+| mAP50     | TBD   |
+| mAP50-95  | TBD   |
+| Precision | TBD   |
+| Recall    | TBD   |
+| F1 Score  | TBD   |
+
+---
+
+## 🔬 Output Analysis
+
+Model quyidagi ma'lumotlarni qaytaradi:
+
+* Crack Count
+* Crack Area (Pixels)
+* Segmentation Mask
+* Severity Level
+
+### Severity Levels
+
+| Crack Area      | Severity |
+| --------------- | -------- |
+| < 5000 px       | Low      |
+| 5000 - 15000 px | Medium   |
+| > 15000 px      | High     |
+
+---
+
+## 🖼️ Example Output
+
+```json
+{
+    "crack_count": 3,
+    "crack_area": 12450,
+    "severity": "Medium"
+}
+```
+
+---
+
+## 🚀 Deployment
+
+### Gradio Web Application
+
+Foydalanuvchi:
+
+1. Rasm yuklaydi
+2. Model inferens qiladi
+3. Segmentatsiya natijasi ko'rsatiladi
+4. Hisobot qaytariladi
+
+### Run Locally
+
+```bash
+pip install -r requirements.txt
+```
+
+```bash
+cd api
+python main.py
+```
+
+---
+
+## 💡 Future Improvements
+
+* Video Crack Detection
+* Drone Road Inspection
+* Crack Length Measurement
+* PDF Report Generation
+* FastAPI REST API
+* ONNX Deployment
+* Real-Time Camera Support
+
+---
+
+## 📚 Technologies Used
+
+* Python
+* YOLOv11 Segmentation
+* OpenCV
+* Gradio
+* NumPy
+* Roboflow
+* PyTorch
+* Git & GitHub
+
+---
+
+## 👨‍💻 Author
+
+Rasulbek Ruzmetov
+
+AI / Machine Learning Engineer
+
+Computer Vision • Deep Learning • Data Science
