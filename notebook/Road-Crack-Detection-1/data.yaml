@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 4
+names: ['Alligator Crack', 'Diagonal Crack', 'Horizontal Crack', 'Vertical Crack']
+
+roboflow:
+  workspace: rasulbeks-workspace-bwa7o
+  project: road-crack-detection-7pqam-krfwt
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/rasulbeks-workspace-bwa7o/road-crack-detection-7pqam-krfwt/dataset/1
